@@ -1,35 +1,26 @@
-import requests 
-
-from bs4 import BeautifulSoup
-
 import random
 
-response = requests.get('https://cookpad.com/kondate/categories/6')
-#print(response)
-#print(response.text)
+from bs4 import BeautifulSoup
+import requests
 
+COOKPAD_URL = 'https://cookpad.com'
+
+response = requests.get(COOKPAD_URL + '/kondate/categories/6')
 data = BeautifulSoup(response.text, 'html.parser')
+recipe_elements = data.find_all(class_="kondate_title")
 
-recipe_class_data = data.find_all(class_="kondate_title")
+recipes = []
 
-recipe_name_list = []
-recipe_url_list = []
+for element in recipe_elements:
+    recipe_title = element.a.string
+    recipe_path = element.a['href']
 
-for i in range(8):
-    recipe_title = recipe_class_data[i].a.string
+    recipes.append({
+        'title': recipe_title,
+        'url': COOKPAD_URL + recipe_path,
+    })
 
-    recipe_url = recipe_class_data[i].a['href']
+recipe = recipes[random.randint(0, len(recipe_elements) - 1)]
 
-    #print(recipe_class_data)
-    #print(recipe_title)
-    #print(recipe_url)
-
-    cookpad_url = 'https://cookpad.com/'
-
-    recipe_name_list.append(recipe_title)
-    recipe_url_list.append(cookpad_url+recipe_url)
-
-today_recipe_number = random.randint(0,7)
-
-print(recipe_name_list[today_recipe_number])
-print(recipe_url_list[today_recipe_number])
+print(recipe['title'])
+print(recipe['url'])

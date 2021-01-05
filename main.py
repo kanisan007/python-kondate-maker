@@ -7,7 +7,7 @@ COOKPAD_URL = 'https://cookpad.com'
 
 response = requests.get(COOKPAD_URL + '/kondate/categories/6')
 data = BeautifulSoup(response.text, 'html.parser')
-recipe_elements = data.find_all(class_="kondate_title")
+recipe_elements = data.find_all(class_='kondate_title')
 
 recipes = []
 
